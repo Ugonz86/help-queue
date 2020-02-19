@@ -48,15 +48,15 @@ export default function Navbar() {
         <Link to="/test"><li style={listElements} >Grid Test</li></Link> 
       </ul>
       <input
-          type='text'
-          id='tweet'
-          style={tweetInputField}
-          placeholder='Tweet' />
-        <input
-          type='text'
-          id='searchBar'
-          style={searchInputField}
-          placeholder='Search Bar' />
+        type='text'
+        id='tweet'
+        style={tweetInputField}
+        placeholder='Tweet' />
+      <input
+        type='text'
+        id='searchBar'
+        style={searchInputField}
+        placeholder='Search Bar' />
       <br />
     </div>
   );

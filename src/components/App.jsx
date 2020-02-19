@@ -1,68 +1,74 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import Navbar from './Navbar';
 import Header from './Header';
 import TicketList from './TicketList';
-import NewTicketForm from './NewTicketForm';
-import GridTest from './GridTest';
-import Test from './Test';
+// import TicketDetail from './TicketDetail';
+import NewTicketControl from './NewTicketControl';
 import Error404 from './Error404';
+import { Switch, Route } from 'react-router-dom';
+import Admin from './Admin';
+import { v4 } from 'uuid';
 
+class App extends React.Component {
 
-function App(){
-  return (
-    <div>
-      <Navbar />
-      <Header />
-      <Switch>
-        <Route exact path='/' component={TicketList} />
-        <Route path='/newticket' component={NewTicketForm} />
-        <Route path='/gridtest' component={GridTest} />
-        <Route path='/test' component={Test} />
-        <Route component={Error404} />
-      </Switch>
-    </div>
-  );
+  constructor(props) {
+    super(props);
+    this.state = {
+      masterTicketList: {},
+      selectedTicket: null
+    };
+    this.handleAddingNewTicketToList = this.handleAddingNewTicketToList.bind(this);
+    this.handleChangingSelectedTicket = this.handleChangingSelectedTicket.bind(this);
+  }
+
+  componentDidMount() {
+    this.waitTimeUpdateTimer = setInterval(() =>
+      this.updateTicketElapsedWaitTime(),
+    60000
+    );
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.waitTimeUpdateTimer);
+  }
+
+  updateTicketElapsedWaitTime() {
+    var newMasterTicketList = Object.assign({}, this.state.masterTicketList);
+    Object.keys(newMasterTicketList).forEach(ticketId => {
+      newMasterTicketList[ticketId].formattedWaitTime = (newMasterTicketList[ticketId].timeOpen).fromNow(true);
+    });
+    this.setState({masterTicketList: newMasterTicketList});
+  }
+
+  handleAddingNewTicketToList(newTicket){
+    var newTicketId = v4();
+    var newMasterTicketList = Object.assign({}, this.state.masterTicketList, {
+      [newTicketId]: newTicket
+    });
+    newMasterTicketList[newTicketId].formattedWaitTime = newMasterTicketList[newTicketId].timeOpen.fromNow(true);
+    this.setState({masterTicketList: newMasterTicketList});
+  }
+
+  handleChangingSelectedTicket(ticketId){
+    this.setState({selectedTicket: ticketId});
+  }
+
+  render(){
+    return (
+      <div>
+        <Header/>
+        <Switch>
+          <Route exact path='/' render={()=><TicketList ticketList={this.state.masterTicketList} />} />
+          <Route path='/newticket' render={()=><NewTicketControl onNewTicketCreation={this.handleAddingNewTicketToList} />} />
+          <Route path='/admin' render={(props)=><Admin ticketList={this.state.masterTicketList} currentRouterPath={props.location.pathname}
+            onTicketSelection={this.handleChangingSelectedTicket}
+            selectedTicket={this.state.selectedTicket}/>} />
+          {/* <Route path='/ticketDetail' component={TicketDetail} /> */}
+          <Route component={Error404} />
+        </Switch>
+      </div>
+    );
+  }
+
 }
 
 export default App;
-
-
-
-
-
-// This is how to use CSS modules for global scope.
-
-// function App() {
-//   return (
-//    <div>
-//       <style jsx global>{`
-//         body {
-//           font-family: Helvetica;
-//         }
-//         .box {
-//           border: none;
-//           display: block;
-//           border-bottom: 2px solid #fff;
-//           margin-bottom: 10px;
-//         }
-//         .box:hover {
-//           border-bottom: 2px solid #ccc;
-//           outline: 0;
-//         }
-//         a {
-//           color: #888;
-//           text-decoration: none;
-//         }
-//       `}</style>
-//       <div style={{margin: '19px auto 0', width: 142}}>
-//         <a href="https://medium.com/" target="_blank">
-//           <div className="box">
-//              <h1>this content will change on hover because we're using styled-jsx! It would even change if our div with className 'box' was in a nested component! So cool!</h1>
-//           </div>
-//         </a>
-//       </div>
-//   </div>
-//   );
-// }
-
