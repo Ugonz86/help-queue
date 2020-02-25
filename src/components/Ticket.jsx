@@ -17,6 +17,7 @@ function Ticket(props){
   const ticketInformation =
     <div>
       <h3>{props.location} - {props.names}</h3>
+      <h4>{props.issue}</h4>
       <h4>{props.formattedWaitTime}</h4>
       <hr/>
     </div>;
