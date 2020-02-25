@@ -14,8 +14,7 @@ function TicketList(props){
           formattedWaitTime={ticket.formattedWaitTime}
           currentRouterPath={props.currentRouterPath}
           key={ticketId}
-          ticketId={ticketId}
-          onTicketSelection={props.onTicketSelection}/>;
+          ticketId={ticketId} />;
       })}
     </div>
   );
@@ -23,26 +22,7 @@ function TicketList(props){
 
 TicketList.propTypes = {
   ticketList: PropTypes.object,
-  currentRouterPath: PropTypes.string,
-  onTicketSelection: PropTypes.func
+  currentRouterPath: PropTypes.string
 };
 
 export default TicketList;
-
-// var masterTicketList = [
-//   {
-//     names: 'Thato and Haley',
-//     location: '3A',
-//     issue: 'Firebase won\'t save record. Halp.'
-//   },
-//   {
-//     names: 'Sleater and Kinney',
-//     location: '4B',
-//     issue: 'Fox image not displaying on page, can only see duck?'
-//   },
-//   {
-//     names: 'Imani & Jacob',
-//     location: '9F',
-//     issue: 'Donkey picture not displaying on hover in Zoology app. :('
-//   }
-// ];
